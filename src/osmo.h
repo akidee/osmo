@@ -40,26 +40,26 @@ namespace osmo {
 			if (!strcmp(a, "k")) {
 
 				if (!memccpy(k, v, 0, K_MAXLEN))
-            			throw std::length_error("k too long");
+					throw std::length_error("k too long");
 
-            		// MongoDB key restriction
-            		if (k[0] == '$') k[0] = ' ';
-            		char* f;
-            		while ((f = strchr(k, '.')) != NULL) {
+					// MongoDB key restriction
+					if (k[0] == '$') k[0] = ' ';
+					char* f;
+					while ((f = strchr(k, '.')) != NULL) {
 
-					f[0] = ':';
-            		}
-            		
-            }
-            else if (!strcmp(a, "v")) {
+						f[0] = ':';
+					}
+					
+			}
+			else if (!strcmp(a, "v")) {
 
 				if (!memccpy(this->v, v, 0, V_MAXLEN))
-            			throw std::length_error("v too long");
-            }
-            else
-            		return false;
+					throw std::length_error("v too long");
+			}
+			else
+				return false;
 
-            	return true;
+			return true;
 		}
 
 		void appendToBsonBuilder (BSONObjBuilder* b) {
@@ -115,16 +115,16 @@ namespace osmo {
 			if (!strcmp(a, "uid") || !strcmp(a, "id")) {
 
 				id = OSMO_USER_ID(v);
-            }
-            else if (!strcmp(a, "user") || !strcmp(a, "name")) {
+			}
+			else if (!strcmp(a, "user") || !strcmp(a, "name")) {
 
-                if (!memccpy(name, v, 0, NAME_MAXLEN))
-            			throw std::length_error("timestamp too long");
-            }
-            else
-            		return false;
+				if (!memccpy(name, v, 0, NAME_MAXLEN))
+					throw std::length_error("timestamp too long");
+			}
+			else
+				return false;
 
-            	return true;
+			return true;
 		}
 
 		BSONObj getBson () {
@@ -173,16 +173,16 @@ namespace osmo {
 			if (!strcmp(a, "ref") || !strcmp(a, "id")) {
 
 				id = OSMO_GEOOBJECTREF_ID(v);
-            }
-            else if (!strcmp(a, "p") || !strcmp(a, "type")) {
+			}
+			else if (!strcmp(a, "p") || !strcmp(a, "type")) {
 
 				p[0] = v[0];
 				p[1] = '\0';
-            }
-            else
-            		return false;
+			}
+			else
+				return false;
 
-            return true;
+			return true;
 		}
 
 		void appendToBsonBuilder (BSONObjBuilder* b) {
@@ -218,12 +218,12 @@ namespace osmo {
 			if (!strcmp(a, "role")) {
 
 				if (!memccpy(role, v, 0, ROLE_MAXLEN))
-            			throw std::length_error("role too long");
-            }
-            else
-            		return false;
+					throw std::length_error("role too long");
+			}
+			else
+				return false;
 
-            return true;
+			return true;
 		}
 
 		BSONObj getBson () {
@@ -280,16 +280,16 @@ namespace osmo {
 				len = list.size();
 				for (int i = 0; i < len; i++) {
 
-		            listB.append(list[i].getBson());
-		        }
-		        b.append("list", listB.arr());
+					listB.append(list[i].getBson());
+				}
+				b.append("list", listB.arr());
 
 				BSONArrayBuilder infoB;
-					len = info.size();
-					for (int i = 0; i < len; i++) {
+				len = info.size();
+				for (int i = 0; i < len; i++) {
 
-			            infoB.append(info[i].getBson());
-			        }
+					infoB.append(info[i].getBson());
+				}
 				b.append("info", infoB.arr());
 			
 			return b.obj();
@@ -361,17 +361,17 @@ namespace osmo {
 
 			if (!strcmp(a, "changeset") || !strcmp(a, "changeset_id") || !strcmp(a, "c")) {
 
-            		c = OSMO_GEOOBJECT_C(v);
-            }
-            else if (!strcmp(a, "timestamp") || !strcmp(a, "tstamp") || !strcmp(a, "t")) {
+				c = OSMO_GEOOBJECT_C(v);
+			}
+			else if (!strcmp(a, "timestamp") || !strcmp(a, "tstamp") || !strcmp(a, "t")) {
 
-                if (!memccpy(t, v, 0, T_MAXLEN))
-                    throw std::length_error("timestamp too long");
-            }
-            else if (!strcmp(a, "version") || !strcmp(a, "v")) {
-            
-                this->v = OSMO_GEOOBJECT_V(v);
-            }
+				if (!memccpy(t, v, 0, T_MAXLEN))
+					throw std::length_error("timestamp too long");
+			}
+			else if (!strcmp(a, "version") || !strcmp(a, "v")) {
+			
+				this->v = OSMO_GEOOBJECT_V(v);
+			}
 			else if (!strcmp(a, "lon")) {
 			
 				lon = OSMO_GEOOBJECT_LON(v);
@@ -438,22 +438,22 @@ namespace osmo {
 
 			int len = (int)tags.size();
 
-	        /*		BSONArrayBuilder indexB;
+			/*		BSONArrayBuilder indexB;
 				for (int i = 0; i < len; i++) {
 
-	                indexB.append(tags[i].getBson());
-	            }
-	        	b.append("tags", indexB.arr());*/
-	        	BSONObjBuilder tagsB;
+					indexB.append(tags[i].getBson());
+				}
+				b.append("tags", indexB.arr());*/
+				BSONObjBuilder tagsB;
 			for (int i = 0; i < len; i++) {
 
-	        		tags[i].appendToBsonBuilder(&tagsB);
-	        	}
-	        	b.append("tags", tagsB.obj());
+				tags[i].appendToBsonBuilder(&tagsB);
+			}
+			b.append("tags", tagsB.obj());
 
-	        	
+				
 
-				///
+			///
 			/*double y = yByLat(16, lat);
 			if (y != NAN) {
 				BSONArrayBuilder _tb;
@@ -462,8 +462,8 @@ namespace osmo {
 					.append(lat);
 				b.append("_t", _tb.arr());
 			}*/
-	        	
-	        return b.obj();
+				
+			return b.obj();
 		}
 	};
 }
