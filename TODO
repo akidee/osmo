@@ -1,0 +1,16 @@
+Next steps
+
+Addd option parsing
+	connection data
+.osc support
+Validate data
+	Assert that necessary attributes for an element are set
+	...
+Debug & unify makefile (must work at least in Linux, MacOS)
+	configure?
+	I need help here
+
+
+Possible features
+
+Support .pbf

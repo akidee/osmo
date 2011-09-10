@@ -1,0 +1,118 @@
+osmo: Populate a MongoDB collection with OpenStreetMap data
+
+
+Features
+
+- osmo populates a MongoDB database collection with all nodes, ways and relations
+- Currently, only OSM XML (.osm) is supported
+- It's just slightly slower than Osmosis (with Postgres)
+- Prerequisites: see DEPENDENCY
+- Building:
+
+	make
+
+	(A priority is it to make this work in both Mac OS and Linux!)
+
+- Synopsis:
+
+	bin/osmo DATAFILE DATABASE.COLLECTION
+
+- To add an index on the primary key:
+
+	mongo DATABASE --eval \
+"printjson(db.COLLECTION.ensureIndex({ p: 1, id: 1 }, { unique: true, dropDups: true, background: true }))"
+
+
+Data model
+
+The data model supported by osmo is focussed on minimal data size and unification. Some principles:
+
+- nodes, ways and relations are transformed to GeoObject instances to unify the concept and to simplify queries on only 1 collection
+- Every geoObject has a key named "p" (prefix). It can have the values, "n" (node), "w" (way) or "r" (relation).
+- keys for regular fields (user, timestamp, ...) are abbreviated to save space
+- The geoObject primary key is [ 'p', 'id' ]
+- Example for a GeoObject instance:
+
+	{
+		"_id" : ObjectId("4e3213dbe9b522a655e3f5ff"),
+		"c" : 4977984,
+		"id" : 318214,
+		"p" : "r",
+		"parts" : { 
+			"list" : [
+				{
+					"p" : "n",
+					"id" : 319621296
+				},
+				{
+					"p" : "n",
+					"id" : 560090559
+				},
+				{
+					"p" : "n",
+					"id" : 292635574
+				},
+				{
+					"p" : "n",
+					"id" : 292635576
+				},
+				{
+					"p" : "n",
+					"id" : 245431191
+				},
+				{
+					"p" : "w",
+					"id" : 48289915
+				},
+				{
+					"p" : "w",
+					"id" : 49366289
+				},
+				...
+			],
+			"info" : [
+				{
+					"role" : "forward"
+				},
+				{
+					"role" : "forward"
+				},
+				{
+					"role" : ""
+				},
+				{
+					"role" : "forward"
+				},
+				{
+					"role" : ""
+				},
+				{
+					"role" : "forward"
+				},
+				{
+					"role" : "forward"
+				},
+				...
+			]
+		}, 
+		"t" : 1276427410,
+		"tags" : { 
+			"network" : "VRT",
+			"operator" : "SWT",
+			"ref" : "4",
+			"route" : "bus",
+			"type" : "route"
+		}, 
+		"u" : { 
+			"id" : 109925,
+			"name" : "WanMil"
+		}, 
+		"v" : 6
+	}
+
+- "parts" is an ObjectView object that has always two properties: "list" (a list of GeoObject references) and "info" (that optionally holds information about the referenced objects in the same order). GeoObjects with p=n do not have parts, with p=w, parts are always references to nodes, with p=r parts can reference any type (node, way, relation).
+
+
+Contribute
+
+Take a look at TODO to see a list of priorized features that are still lacking.

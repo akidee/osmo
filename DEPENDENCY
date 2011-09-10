@@ -1,0 +1,5 @@
+{MongoDB}
+{MongoDB C++ driver}
+Take a look at makefile (currently not configured at all)
+make
+Test with small .osm file
